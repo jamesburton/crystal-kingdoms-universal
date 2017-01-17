@@ -25,6 +25,12 @@ export default (
         cb(null, require('./containers/Home.jsx'));
       });
     }}/>
-    // Other Pages.
+    //* Other Pages.
+    // Play Page
+    <Route path="play" getComponent={(next,cb) => {
+      require.ensure([], (require) => {
+        cb(null, require('./views/Play.jsx'))
+      });
+    }} />
   </Route>
 );
