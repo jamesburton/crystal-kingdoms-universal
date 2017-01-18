@@ -6,7 +6,9 @@ import ScorePanel from './ScorePanel';
 //import styles from '../scss/styles.scss';
 const styles = {
     cellPanel: { width: '512px', height: '512px', backgroundColor: '#88a', float: 'left' },
+    //cellPanel: { width: '512px', height: '512px', backgroundColor: '#88a', float: 'left', position: 'absolute', top: 0, left: 0 },
     scoresPanel: { width: 'auto', height: '512px', backgroundColor: '#a88', float: 'left' },
+    //scoresPanel: { left: '520px', right: '8px', top: 0, height: '512px', backgroundColor: '#a88', float: 'left' },
     controlsPanel: { width: '100%', height: 'auto', backgroundColor: '#8a8', float: 'none', clear: 'both' },
     cell: { width: '64px', height: '64px', backgroundColor: '#666', float: 'left' }
 };

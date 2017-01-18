@@ -1,8 +1,9 @@
 import React from 'react';
 //var CellPanel = (props) => <div>[CellPanel]</div>;
 import Cell from './Cell';
+import Cursor from './Cursor';
 var CellRow = (props) => <div>
-    { props.cells.map(cell => <Cell {...cell} />) }
+    { props.cells.map((cell, index) => <Cell key={index} {...cell} />) }
 </div>;
 class CellPanel extends React.Component {
     render() {
@@ -16,7 +17,10 @@ class CellPanel extends React.Component {
         </div>;
         */
         return <div className="cellPanel">
-            { props.cells.map(row => <CellRow cells={row} />) }
+            { props.cells.map((row,index) => <CellRow key={index} cells={row} />) }
+            <div style={{width: 0, height: 0, overflow: 'visible', position: 'absolute'}}>
+                <Cursor visible={props.cursorVisible} x={props.cursorX} y={props.cursorY} />
+            </div>
         </div>;
     }
 }

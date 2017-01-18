@@ -1,5 +1,5 @@
 import { DISMISS_SPLASH_SCREEN, QUIT_GAME, RESET_GAME, START_GAME } from '../actions/play';
-const initialPlayState = { showSplashScreen: true, gameStarted: false, cells: [], players: [] };
+const initialPlayState = { showSplashScreen: true, gameStarted: false, cells: [], players: [], cursorVisible: true, cursorX: 0, cursorY: 0 };
 
 const gridSize = { x: 8, y: 8 };
 var newCell = function(x,y) {
