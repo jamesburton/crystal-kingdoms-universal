@@ -31,8 +31,14 @@ const getCellsFromRows = (cells) => [].concat.apply([], cells);
 const getEmptyCells = (cells) => getCellsFromRows(cells).filter(cell => cell.owner === null);
 
 const newCursorLocation = (cells) => {
-    let emptyCells = getEmptyCells();
-    const cell = emptyCells === null || emptyCells.length === 0 ? null : cells[Math.random() * emptyCells.length];
+    let emptyCells = getEmptyCells(cells);
+    let cell = null;
+    if(emptyCells && emptyCells.length) {
+        const index = Math.floor(Math.random() * emptyCells.length);
+        console.log('... we have empty cells, selecting index ', index);
+        cell = emptyCells[index];
+    }
+    console.log('newCursorLocation:- emptyCells=', emptyCells, ', cell=', cell);
     return cell === null ? null : { x: cell.x, y: cell.y };
 };
 
