@@ -34,6 +34,8 @@ class Play extends React.Component {
             attackFire={() => props.dispatch(playActions.attack(props.players[0], Directions.FIRE))}
 
             clearScore={() => props.dispatch(playActions.clearScores())}
+            pause={() => props.dispatch(playActions.pause())}
+            unpause={() => props.dispatch(playActions.unpause())}
 
             {...props} />;
     }

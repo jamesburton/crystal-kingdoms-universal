@@ -2,6 +2,7 @@ import React from 'react';
 //var CellPanel = (props) => <div>[CellPanel]</div>;
 import Cell from './Cell';
 import Cursor from './Cursor';
+import PauseOverlay from './PauseOverlay';
 var CellRow = (props) => <div style={{width: '64px', float: 'left'}}>
     { props.cells.map((cell, index) => <Cell key={index} {...cell} />) }
 </div>;
@@ -19,6 +20,7 @@ class CellPanel extends React.Component {
         return <div className="cellPanel">
             { props.cells.map((row,index) => <CellRow key={index} cells={row} />) }
             <div style={{width: 0, height: 0, overflow: 'visible', position: 'absolute'}}>
+                <PauseOverlay paused={props.paused} />
                 <Cursor visible={props.cursorVisible} x={props.cursorX} y={props.cursorY} />
             </div>
         </div>;

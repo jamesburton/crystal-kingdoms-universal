@@ -57,8 +57,6 @@ var Cell = (props) => {
     return <div className="cell" style={styles.cell}>
         <img style={styles.noDisplace} src={Castle} />
         <img style={styles.noDisplace} src={ownerCrystal} />
-        <div style={styles.noDisplace}>{props.x}, {props.y}</div>
-        <div><strong>Owner:</strong> {owner ? owner.name : 'NONE'}</div>
     </div>;
 }
 module.exports = Cell;

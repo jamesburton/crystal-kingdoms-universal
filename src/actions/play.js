@@ -17,6 +17,8 @@ export const SHOW_NEW_PLAYER = "SHOW_NEW_PLAYER";
 export const ADD_NEW_PLAYER = "ADD_NEW_PLAYER";
 export const CLEAR_NEW_PLAYER = "CLEAR_NEW_PLAYER";
 export const CLEAR_SCORES = "CLEAR_SCORES";
+export const PAUSE = "PAUSE";
+export const UNPAUSE = "UNPAUSE";
 export const dismissSplashScreen = () => { return { type: DISMISS_SPLASH_SCREEN /* ... other parameters */ }; };
 export const quitGame = () => { return { type: QUIT_GAME }; };
 export const resetGame = () => { return { type: RESET_GAME }; };
@@ -36,6 +38,8 @@ export const addNewPlayer = (player) => { return { type: ADD_NEW_PLAYER }; };
 export const showNewPlayer = () => { return { type: SHOW_NEW_PLAYER }; };
 export const clearNewPlayer = () => { return { type: CLEAR_NEW_PLAYER}; };
 export const clearScores = () => { return { type: CLEAR_SCORES }; };
+export const pause = () => { return { type: PAUSE }; };
+export const unpause = () => { return { type: UNPAUSE }; };
 module.exports = {
     DISMISS_SPLASH_SCREEN,
     QUIT_GAME,
@@ -56,6 +60,8 @@ module.exports = {
     ADD_NEW_PLAYER,
     CLEAR_NEW_PLAYER,
     CLEAR_SCORES,
+    PAUSE,
+    UNPAUSE,
 
     dismissSplashScreen,
     quitGame,
@@ -75,5 +81,7 @@ module.exports = {
     hideNewPlayer,
     addNewPlayer,
     clearNewPlayer,
-    clearScores
+    clearScores,
+    pause,
+    unpause
 };

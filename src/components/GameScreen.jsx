@@ -14,39 +14,60 @@ const styles = {
     cell: { width: '64px', height: '64px', backgroundColor: '#666', float: 'left' }
 };
 
-var GameScreen = (props) => <div>
-    <h2>Game Screen</h2>
+class GameScreen extends React.Component {
+    componentWillMount() {
+        this.lastTick = null;
+        if(!this.props.paused) {
+            this.timerHandle = window.setInterval(() => this.tick(), 2500);
+        }
+    }
+    tick() {
+        if(!this.props.paused) {
+            console.log('GameScreen.tick ... actual functions have yet to be written');
+            this.lastTick = new Date();
+        }
+    }
+    render() {
+        var props = this.props;
+        return <div>
+            <h2>Game Screen</h2>
 
-    <div>
-        <div style={styles.cellPanel}>
-            <CellPanel {...props} />
-        </div>
-        <div style={styles.scoresPanel}>
-            { /*
-            <ScorePanel {...props} />
-            */ }
-            <ScorePanel players={props.players} />
+            <div>
+                <div style={styles.cellPanel}>
+                    <CellPanel {...props} />
+                </div>
+                <div style={styles.scoresPanel}>
+                    { /*
+                    <ScorePanel {...props} />
+                    */ }
+                    <ScorePanel players={props.players} />
 
-            { props.showingNewOrEditPlayer && <NewPlayerPanel {...props} /> }
-        </div>
-    </div>
+                    { props.showingNewOrEditPlayer && <NewPlayerPanel {...props} /> }
+                </div>
+            </div>
 
-    <div style={styles.controlsPanel}>
-        <button onClick={props.quitGame}>Quit Game</button> 
-        <button onClick={props.resetGame}>Reset Game</button>
-        <button onClick={props.showCursor}>Show Cursor</button>
-        <button onClick={props.hideCursor}>Hide Cursor</button>
-        <button onClick={props.moveCursor}>Move Cursor</button>
+            <div style={styles.controlsPanel}>
+                <button onClick={props.quitGame}>Quit Game</button> 
+                <button onClick={props.resetGame}>Reset Game</button>
+                <button onClick={props.showCursor}>Show Cursor</button>
+                <button onClick={props.hideCursor}>Hide Cursor</button>
+                <button onClick={props.moveCursor}>Move Cursor</button>
 
-        <button onClick={props.newPlayer}>New Player</button>
+                <button onClick={props.newPlayer}>New Player</button>
 
-        <button onClick={props.attackLeft}>Left</button>
-        <button onClick={props.attackRight}>Right</button>
-        <button onClick={props.attackUp}>Up</button>
-        <button onClick={props.attackDown}>Down</button>
-        <button onClick={props.attackFire}>Fire</button>
+                <button onClick={props.attackLeft}>Left</button>
+                <button onClick={props.attackRight}>Right</button>
+                <button onClick={props.attackUp}>Up</button>
+                <button onClick={props.attackDown}>Down</button>
+                <button onClick={props.attackFire}>Fire</button>
 
-        <button onClick={props.clearScores}>Clear Scores</button>
-    </div>
-</div>;
+                <button onClick={props.clearScores}>Clear Scores</button>
+
+                { props.paused
+                    ? <button onClick={props.unpause}>Unpause</button>
+                    : <button onClick={props.pause}>Pause</button> }
+            </div>
+        </div>;
+    }
+}
 module.exports = GameScreen;

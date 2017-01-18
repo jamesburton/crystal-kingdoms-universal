@@ -1,5 +1,5 @@
 import { DISMISS_SPLASH_SCREEN, QUIT_GAME, RESET_GAME, START_GAME, HIDE_CURSOR, MOVE_CURSOR, SHOW_CURSOR, ATTACK, ADD_PLAYER, EDIT_PLAYER, SET_EDIT_PLAYER_NAME, SET_EDIT_PLAYER_COLOR,
-    UPDATE_PLAYER, REMOVE_PLAYER, SHOW_NEW_PLAYER, HIDE_NEW_PLAYER, ADD_NEW_PLAYER, CLEAR_NEW_PLAYER, CLEAR_SCORES } from '../actions/play';
+    UPDATE_PLAYER, REMOVE_PLAYER, SHOW_NEW_PLAYER, HIDE_NEW_PLAYER, ADD_NEW_PLAYER, CLEAR_NEW_PLAYER, CLEAR_SCORES, PAUSE, UNPAUSE } from '../actions/play';
 import PlayerColors from '../constants/PlayerColors';
 import { availablePlayerColors } from '../constants/PlayerColors';
 import Directions from '../constants/Directions';
@@ -10,7 +10,8 @@ const initialPlayState = {
     players: [], 
     cursorVisible: true, cursorX: 0, cursorY: 0,
     showingNewOrEditPlayer: false,
-    editPlayerName: '', editPlayerIndex: null, editPlayerColor: null
+    editPlayerName: '', editPlayerIndex: null, editPlayerColor: null,
+    paused: false
 };
 //import { flatten } from '../helpers/arrayHelpers';
 
@@ -101,7 +102,8 @@ const adjacentCells = (cellRows, x, y) => {
     const down = y < gridSize.y - 1 ? y + 1 : 0;
     return [cellRows[left][y], cellRows[right][y], cellRows[x][up], cellRows[x][down]];
 };
-const ownedAdjacentCount = (cellRows, x, y, player) => adjacentCells(cellRows, x, y).filter(cell => cell.owner === player).length;
+//const ownedAdjacentCount = (cellRows, x, y, player) => adjacentCells(cellRows, x, y).filter(cell => cell.owner === player).length;
+const ownedAdjacentCount = (cellRows, x, y, player) => adjacentCells(cellRows, x, y).filter(cell => cell.owner.id === player.id).length;
 
 const MAX_CONTAGION = 3;
 const attack = (state, player, direction, x, y, cellRows) => {
@@ -114,14 +116,18 @@ const attack = (state, player, direction, x, y, cellRows) => {
     var nextCell = getNextCell(cellRows, x, y, direction);
     if(!nextCell) throw "nextCell missing in attack method!";
 
+    const playerId = player.id;
+
     if(nextCell.owner === null) {
         // Capture the cell and stop
         console.log('Capturing cell ' + nextCell.x + ',' + nextCell.y);
         nextCell.owner = player;
+        // Clear contagion, as this wipes other attempts to capture it
+        nextCell.contagion = [];
         addPoints("CAPTURE", player, ownedAdjacentCount(cellRows, nextCell.x, nextCell.y, player));
         console.log('... new score=', player.score);
     //} else if(nextCell.owner === player) {
-    } else if(nextCell.owner.id === player.id) {
+    } else if(nextCell.owner.id === playerId) {
         // Destroy the cell and stop
         console.log('Destroying self-owned cell');
         nextCell.owner = null;
@@ -129,20 +135,24 @@ const attack = (state, player, direction, x, y, cellRows) => {
     } else {
         //let playerIndex = state.players.indexOf(player)
         // NB: Must be another player's castle, so add contagion (TODO: Complete logic and enhance scoring), then attack the next cell if this used a direction other than FIRE
-        nextCell.contagion[player] = (nextCell.contagion[player] || 0)+1;
+        //nextCell.contagion[player] = (nextCell.contagion[player] || 0)+1;
+        nextCell.contagion[playerId] = (nextCell.contagion[playerId] || 0) + 1;
         //console.log('Adding contagion: playerIndex=' + playerIndex + ', nextCell.contagion[playerIndex]=' + nextCell.contagion[playerIndex]);
         //nextCell.contagion[playerIndex] = (nextCell.contagion[playerIndex] || 0) + 1;
-        if(nextCell.contagion[player] > MAX_CONTAGION) {
+        //if(nextCell.contagion[player] > MAX_CONTAGION) {
         //if(nextCell.contagion[playerIndex] > MAX_CONTAGION) {
+        if(nextCell.contagion[playerId] > MAX_CONTAGION) {
             console.log('Exceeded max contagion, overrunning castle');
             nextCell.contagion = [];
             nextCell.owner = player;
             addPoints("OVERRUN", player, ownedAdjacentCount(cellRows, nextCell.x, nextCell.y, player));
         } else {
-            console.log('Adding contagion to cell (new total=' + nextCell.contagion[player] + ')');
+            //console.log('Adding contagion to cell (new total=' + nextCell.contagion[player] + ')');
             //console.log('Adding contagion to cell (new total=' + nextCell.contagion[playerIndex] + ')');
-            addPoints("CONTAGION", player, nextCell.contagion[player]);
+            console.log('Adding contagion to cell (new total=' + nextCell.contagion[playerId] + ')');
+            //addPoints("CONTAGION", player, nextCell.contagion[player]);
             //addPoints("CONTAGION", player, nextCell.contagion[playerIndex]);
+            addPoints("CONTAGION", player, nextCell.contagion[playerId]);
         }
         if(direction !== Directions.FIRE) {
             console.log('Direction is not FIRE, so proceeding to next cell');
@@ -215,6 +225,10 @@ const play = (state = initialPlayState, action) => {
             return Object.assign({}, state, { editPlayerName: '', editPlayerColor: null });
         case CLEAR_SCORES:
             return Object.assign({}, state, { players: state.players.map(player => { player.score = 0; return player; }) });
+        case PAUSE:
+            return Object.assign({}, state, { paused: true });
+        case UNPAUSE:
+            return Object.assign({}, state, { paused: false });
         default:
             return state;
     }
