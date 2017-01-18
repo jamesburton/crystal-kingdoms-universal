@@ -2,13 +2,13 @@ import React from 'react';
 //var CellPanel = (props) => <div>[CellPanel]</div>;
 import Cell from './Cell';
 import Cursor from './Cursor';
-var CellRow = (props) => <div>
+var CellRow = (props) => <div style={{width: '64px', float: 'left'}}>
     { props.cells.map((cell, index) => <Cell key={index} {...cell} />) }
 </div>;
 class CellPanel extends React.Component {
     render() {
         const props = this.props;
-        console.log('CellPanel.render: props=', props);
+        //console.log('CellPanel.render: props=', props);
         /*
         return <div className="cellPanel">
             {props.cells.map(cellRow => {

@@ -2,6 +2,7 @@ import React from 'react';
 
 import CellPanel from './CellPanel';
 import ScorePanel from './ScorePanel';
+import NewPlayerPanel from './NewPlayerPanel';
 
 //import styles from '../scss/styles.scss';
 const styles = {
@@ -21,7 +22,12 @@ var GameScreen = (props) => <div>
             <CellPanel {...props} />
         </div>
         <div style={styles.scoresPanel}>
+            { /*
             <ScorePanel {...props} />
+            */ }
+            <ScorePanel players={props.players} />
+
+            { props.showingNewOrEditPlayer && <NewPlayerPanel {...props} /> }
         </div>
     </div>
 
@@ -31,6 +37,16 @@ var GameScreen = (props) => <div>
         <button onClick={props.showCursor}>Show Cursor</button>
         <button onClick={props.hideCursor}>Hide Cursor</button>
         <button onClick={props.moveCursor}>Move Cursor</button>
+
+        <button onClick={props.newPlayer}>New Player</button>
+
+        <button onClick={props.attackLeft}>Left</button>
+        <button onClick={props.attackRight}>Right</button>
+        <button onClick={props.attackUp}>Up</button>
+        <button onClick={props.attackDown}>Down</button>
+        <button onClick={props.attackFire}>Fire</button>
+
+        <button onClick={props.clearScores}>Clear Scores</button>
     </div>
 </div>;
 module.exports = GameScreen;
