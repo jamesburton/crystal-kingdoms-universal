@@ -103,7 +103,7 @@ const adjacentCells = (cellRows, x, y) => {
     return [cellRows[left][y], cellRows[right][y], cellRows[x][up], cellRows[x][down]];
 };
 //const ownedAdjacentCount = (cellRows, x, y, player) => adjacentCells(cellRows, x, y).filter(cell => cell.owner === player).length;
-const ownedAdjacentCount = (cellRows, x, y, player) => adjacentCells(cellRows, x, y).filter(cell => cell.owner.id === player.id).length;
+const ownedAdjacentCount = (cellRows, x, y, playerId) => adjacentCells(cellRows, x, y).filter(cell => cell.owner && cell.owner.id === playerId).length;
 
 const MAX_CONTAGION = 3;
 const attack = (state, player, direction, x, y, cellRows) => {
