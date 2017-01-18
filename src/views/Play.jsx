@@ -12,6 +12,9 @@ class Play extends React.Component {
             dismissSplashScreen={() => props.dispatch(playActions.dismissSplashScreen())}
             startGame={() => props.dispatch(playActions.startGame())}
             quitGame={() => props.dispatch(playActions.quitGame())}
+            hideCursor={() => props.dispatch(playActions.hideCursor())}
+            moveCursor={() => props.dispatch(playActions.moveCursor())}
+            showCursor={() => props.dispatch(playActions.showCursor())}
             {...props} />;
     }
 }

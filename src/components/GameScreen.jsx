@@ -28,6 +28,9 @@ var GameScreen = (props) => <div>
     <div style={styles.controlsPanel}>
         <button onClick={props.quitGame}>Quit Game</button> 
         <button onClick={props.resetGame}>Reset Game</button>
+        <button onClick={props.showCursor}>Show Cursor</button>
+        <button onClick={props.hideCursor}>Hide Cursor</button>
+        <button onClick={props.moveCursor}>Move Cursor</button>
     </div>
 </div>;
 module.exports = GameScreen;

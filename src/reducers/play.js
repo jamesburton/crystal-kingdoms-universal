@@ -1,5 +1,6 @@
-import { DISMISS_SPLASH_SCREEN, QUIT_GAME, RESET_GAME, START_GAME } from '../actions/play';
+import { DISMISS_SPLASH_SCREEN, QUIT_GAME, RESET_GAME, START_GAME, HIDE_CURSOR, MOVE_CURSOR, SHOW_CURSOR } from '../actions/play';
 const initialPlayState = { showSplashScreen: true, gameStarted: false, cells: [], players: [], cursorVisible: true, cursorX: 0, cursorY: 0 };
+import { flatten } from '../helpers/arrayHelpers';
 
 const gridSize = { x: 8, y: 8 };
 var newCell = function(x,y) {
@@ -26,6 +27,15 @@ const resetGame = () => {
     return { cells: createNewCells() };
 };
 
+const getCellsFromRows = (cells) => [].concat.apply([], cells);
+const getEmptyCells = (cells) => getCellsFromRows(cells).filter(cell => cell.owner === null);
+
+const newCursorLocation = (cells) => {
+    let emptyCells = getEmptyCells();
+    const cell = emptyCells === null || emptyCells.length === 0 ? null : cells[Math.random() * emptyCells.length];
+    return cell === null ? null : { x: cell.x, y: cell.y };
+};
+
 const play = (state = initialPlayState, action) => {
     switch(action.type) {
         case DISMISS_SPLASH_SCREEN:
@@ -39,6 +49,15 @@ const play = (state = initialPlayState, action) => {
             return Object.assign({}, state, resetGame());
         case START_GAME:
             return Object.assign({}, state, { gameStarted: true }, resetGame());
+        case HIDE_CURSOR:
+            return Object.assign({}, state, { cursorVisible: false });
+        case MOVE_CURSOR:
+            const position = action.x && action.y ? { x: action.x, y: action.y } : newCursorLocation(state.cells);
+            return Object.assign({}, state, { cursorX: position.x, cursorY: position.y });
+        case SHOW_CURSOR:
+            //return Object.assign({}, state, { cursorVisible: true });
+            // Move and show cursor
+            return Object.assign({}, play(state, {type: MOVE_CURSOR}), { cursorVisible: true });
         default:
             return state;
     }
